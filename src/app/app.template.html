@@ -1,0 +1,21 @@
+<div style="text-align:center">
+    <h1>
+        Welcome to {{ title }}!
+    </h1>
+    <ul *ngIf="imageList" style="list-style-type: none;">
+        <li *ngFor="let image of imageList" style="display: inline; padding: 10px;">
+            <img [src]="getPicture(image.ImageValue)" >
+        </li>
+    </ul>
+
+    <button (click)="addUser()">Add user</button>
+    <button (click)="deleteUser()">Delete user</button>
+    <h2>User list: </h2>
+    <div>
+        <ul style="list-style-type: none;">
+            <li *ngFor="let user of userList">
+                {{ user.FirstName }} {{ user.LastName }}
+            </li>
+        </ul>
+    </div>
+</div>

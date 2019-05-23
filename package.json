@@ -29,7 +29,10 @@
                 ]
             },
             "electronPackagerConfig": {
-                "packageManager": "npm"
+                "packageManager": "npm",
+                "asar": {
+                "unpackDir": "src/assets/data"
+                }
             },
             "electronWinstallerConfig": {
                 "name": "crv"

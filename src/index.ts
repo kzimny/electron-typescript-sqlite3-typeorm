@@ -16,12 +16,16 @@ if (isDevMode) {
 }
 
 const createWindow = async () => {
+
+    let dbPath = isDevMode ?
+    './src/assets/data/test.db' : './resources/app.asar.unpacked/src/assets/data/test.db';
+
     const connection = await createConnection({
         type: 'sqlite',
         synchronize: true,
         logging: false,
         logger: 'simple-console',
-        database: './src/assets/data/test.db',
+        database: dbPath,
         entities: [ TUser, TPicture ]
     });
 

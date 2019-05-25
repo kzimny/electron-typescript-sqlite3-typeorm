@@ -17,8 +17,7 @@ if (isDevMode) {
 
 const createWindow = async () => {
 
-    let dbPath = isDevMode ?
-    './src/assets/data/test.db' : './resources/app.asar.unpacked/src/assets/data/test.db';
+    let dbPath = isDevMode ? './src/assets/data/test.db' : './test.db';
 
     const connection = await createConnection({
         type: 'sqlite',

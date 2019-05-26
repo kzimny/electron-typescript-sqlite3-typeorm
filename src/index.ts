@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { enableLiveReload } from 'electron-compile';
+import * as path from 'path';
 
 import { createConnection } from 'typeorm';
 
@@ -15,16 +16,24 @@ if (isDevMode) {
     enableLiveReload();
 }
 
-const createWindow = async () => {
+function getDbPath(): string {
+    if (isDevMode) {
+        return './src/assets/data/test.db';
+    } else {
+        return process.platform === 'win32' ? 
+        './test.db' : 
+        path.join(app.getAppPath(), '/../../../../test.db' );
+    }
+}
 
-    let dbPath = isDevMode ? './src/assets/data/test.db' : './test.db';
+const createWindow = async () => {
 
     const connection = await createConnection({
         type: 'sqlite',
         synchronize: true,
         logging: false,
         logger: 'simple-console',
-        database: dbPath,
+        database: getDbPath(),
         entities: [ TUser, TPicture ]
     });
 
@@ -53,7 +62,7 @@ const createWindow = async () => {
         mainWindow = null;
     });
 
-    ipcMain.on('get-users', async (event: any, ...args: any[]) => {
+    ipcMain.on('get-users', async (event: any, ..._args: any[]) => {
         try {
             event.returnValue = await userRepo.find();
         } catch (err) {
@@ -81,7 +90,7 @@ const createWindow = async () => {
         }
     });
 
-    ipcMain.on('get-pictures', async (event: any, ...args: any[]) => {
+    ipcMain.on('get-pictures', async (event: any, ..._args: any[]) => {
         try {
             event.returnValue = await pictureRepo.find();
         } catch (err) {

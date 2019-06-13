@@ -3,80 +3,96 @@
     "productName": "crv",
     "version": "1.0.0",
     "description": "Classroom Viewer",
-    "main": "src/index.ts",
+    "main": ".webpack/main",
     "scripts": {
         "start": "electron-forge start",
         "package": "electron-forge package",
         "package-debug-win": "set DEBUG=electron-forge:* & electron-forge package",
         "make": "electron-forge make",
         "publish": "electron-forge publish",
-        "lint": "tslint src"
+        "lint": "tslint src",
+        "rebuild": "electron-rebuild -f -w sqlite3",
+        "postinstall": "electron-builder install-app-deps"
     },
     "keywords": [],
     "author": "Krzysztof Zimny, ZNF GmbH",
     "license": "MIT",
     "config": {
         "forge": {
-            "make_targets": {
-                "win32": [
-                    "squirrel"
-                ],
-                "darwin": [
-                    "zip"
-                ],
-                "linux": [
-                    "deb",
-                    "rpm"
+            "packagerConfig": {},
+            "makers": [
+                {
+                    "name": "@electron-forge/maker-squirrel",
+                    "config": {
+                        "name": "my_new_app"
+                    }
+                },
+                {
+                    "name": "@electron-forge/maker-zip",
+                    "platforms": [
+                        "darwin"
+                    ]
+                },
+                {
+                    "name": "@electron-forge/maker-deb",
+                    "config": {}
+                },
+                {
+                    "name": "@electron-forge/maker-rpm",
+                    "config": {}
+                }
+            ],
+            "plugins": [
+                [
+                    "@electron-forge/plugin-webpack",
+                    {
+                        "mainConfig": "./config/webpack.main.config.js",
+                        "renderer": {
+                            "config": "./config/webpack.renderer.config.js",
+                            "entryPoints": [
+                                {
+                                    "html": "./src/renderer/index.html",
+                                    "js": "./src/renderer/bootstrap.ts",
+                                    "name": "main_window"
+                                }
+                            ]
+                        }
+                    }
                 ]
-            },
-            "electronPackagerConfig": {
-                "packageManager": "npm",
-                "afterExtract": [
-                    "src/build-scripts/afterExtract.js"
-                  ],
-                "overwrite": true
-            },
-            "electronWinstallerConfig": {
-                "name": "crv"
-            },
-            "electronInstallerDebian": {},
-            "electronInstallerRedhat": {},
-            "github_repository": {
-                "owner": "",
-                "name": ""
-            },
-            "windowsStoreConfig": {
-                "packageName": "",
-                "name": "crv"
-            }
+            ]
         }
     },
     "dependencies": {
-        "@angular/common": "^7.2.15",
-        "@angular/compiler": "^7.2.15",
-        "@angular/core": "^7.2.15",
-        "@angular/platform-browser": "^7.2.15",
-        "@angular/platform-browser-dynamic": "^7.2.15",
-        "electron-compile": "^6.4.4",
-        "electron-devtools-installer": "^2.2.4",
+        "@angular/common": "^8.0.0",
+        "@angular/compiler": "^8.0.0",
+        "@angular/core": "^8.0.0",
+        "@angular/platform-browser": "^8.0.0",
+        "@angular/platform-browser-dynamic": "^8.0.0",
         "electron-squirrel-startup": "^1.0.0",
         "ngx-electron": "^2.1.1",
         "reflect-metadata": "^0.1.13",
         "rxjs": "^6.5.2",
         "sqlite3": "^4.0.8",
-        "tslib": "^1.9.3",
-        "typeorm": "^0.2.17",
+        "tslib": "^1.10.0",
+        "typeorm": "^0.2.18",
         "zone.js": "^0.9.1"
     },
     "devDependencies": {
-        "babel-plugin-transform-async-to-generator": "^6.24.1",
-        "babel-preset-env": "^1.7.0",
-        "babel-preset-react": "^6.24.1",
+        "@electron-forge/cli": "6.0.0-beta.39",
+        "@electron-forge/maker-deb": "6.0.0-beta.39",
+        "@electron-forge/maker-rpm": "6.0.0-beta.39",
+        "@electron-forge/maker-squirrel": "6.0.0-beta.39",
+        "@electron-forge/maker-zip": "6.0.0-beta.39",
+        "@electron-forge/plugin-webpack": "6.0.0-beta.39",
+        "@types/webpack": "^4.4.32",
+        "copy-webpack-plugin": "^5.0.3",
         "debug": "^4.1.1",
-        "electron": "^5.0.1",
-        "electron-forge": "^5.2.4",
-        "electron-prebuilt-compile": "4.0.0",
-        "tslint": "^5.16.0",
-        "typescript": "~3.2.4"
+        "electron": "^5.0.3",
+        "electron-builder": "^20.43.0",
+        "file-loader": "^4.0.0",
+        "ts-loader": "^6.0.2",
+        "tslint": "^5.17.0",
+        "typescript": "~3.5.1",
+        "webpack-merge": "^4.2.1"
     }
 }

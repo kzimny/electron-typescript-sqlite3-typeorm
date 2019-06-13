@@ -1,27 +1,25 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { enableLiveReload } from 'electron-compile';
 import * as path from 'path';
-
 import { createConnection } from 'typeorm';
+import { TUser, TPicture } from '../renderer/entities/index';
 
-import { TUser, TPicture } from './assets/entities/index';
+// Handle creating/removing shortcuts on Windows when installing/uninstalling.
+if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
+    app.quit();
+}
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow: Electron.BrowserWindow | null;
+let mainWindow: BrowserWindow | null;
 
 const isDevMode = process.execPath.match(/[\\/]electron/);
-
-if (isDevMode) {
-    enableLiveReload();
-}
 
 function getDbPath(): string {
     if (isDevMode) {
         return './src/assets/data/test.db';
     } else {
-        return process.platform === 'win32' ? 
-        './test.db' : 
+        return process.platform === 'win32' ?
+        './test.db' :
         path.join(app.getAppPath(), '/../../../../test.db' );
     }
 }
@@ -37,17 +35,25 @@ const createWindow = async () => {
         entities: [ TUser, TPicture ]
     });
 
+    // Create the browser window.
+    mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true
+        }
+    });
+
     const userRepo = connection.getRepository(TUser);
     const pictureRepo = connection.getRepository(TPicture);
 
-    // Create the browser window.
-    mainWindow = new BrowserWindow({
-        width: 1000,
-        height: 800,
-    });
-
     // and load the index.html of the app.
-    mainWindow.loadURL(`file://${__dirname}/index.html`);
+    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+
+    const y = userRepo.find().then(w => {
+        console.log(w);
+    });
 
     // Open the DevTools.
     if (isDevMode) {

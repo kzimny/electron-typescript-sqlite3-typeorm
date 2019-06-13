@@ -2,21 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { DatabaseService } from '../services/database.service';
-import { TUser, TPicture } from '../assets/entities';
+import { TUser, TPicture } from '../entities';
 import { forkJoin } from 'rxjs';
 
 @Component({
     selector: 'app-crv',
-    templateUrl: './app/app.template.html',
+    templateUrl: './app.template.html',
 })
 export class AppComponent implements OnInit {
     public readonly title = 'Electron + Sqlite + typeorm';
     userList: TUser[];
     imageList: TPicture[];
+    pathWebpack: string;
 
     constructor(
         private dbservice: DatabaseService,
-        private sanitizer: DomSanitizer) {}
+        private sanitizer: DomSanitizer) {
+            this.pathWebpack = MAIN_WINDOW_WEBPACK_ENTRY;
+        }
 
     ngOnInit(): void {
         forkJoin(this.dbservice.getUsers(),
@@ -45,14 +48,14 @@ export class AppComponent implements OnInit {
         }
     }
 
-    getPicture(image: Buffer): SafeUrl {
+    // getPicture(image: Buffer): SafeUrl {
 
-        // convert the Unicode values into a string of characters
-        const stringChar = String.fromCharCode.apply(null, image);
-        // pass the string of characters to window.btoa() method
-        // which will return a base-64 encoded ASCII string
-        let base64String = btoa(stringChar);
-        // append the base64 string to the data URL and bypass sanitization
-        return this.sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64, ' + base64String);
-    }
+    //     // convert the Unicode values into a string of characters
+    //     const stringChar = String.fromCharCode.apply(null, image);
+    //     // pass the string of characters to window.btoa() method
+    //     // which will return a base-64 encoded ASCII string
+    //     let base64String = btoa(stringChar);
+    //     // append the base64 string to the data URL and bypass sanitization
+    //     return this.sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64, ' + base64String);
+    // }
 }

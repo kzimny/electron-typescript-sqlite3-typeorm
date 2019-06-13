@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { TUser, TPicture } from '../assets/entities/index';
+import { TUser, TPicture } from '../entities/index';
 
 import { ElectronService } from 'ngx-electron';
 import { catchError } from 'rxjs/operators';

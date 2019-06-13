@@ -2,11 +2,11 @@
     <h1>
         Welcome to {{ title }}!
     </h1>
-    <ul *ngIf="imageList" style="list-style-type: none;">
+    <!-- <ul *ngIf="imageList" style="list-style-type: none;">
         <li *ngFor="let image of imageList" style="display: inline; padding: 10px;">
             <img [src]="getPicture(image.ImageValue)" />
         </li>
-    </ul>
+    </ul> -->
 
     <button (click)="addUser()">Add user</button>
     <button (click)="deleteUser()">Delete user</button>
@@ -19,3 +19,4 @@
         </ul>
     </div>
 </div>
+{{ pathWebpack }}

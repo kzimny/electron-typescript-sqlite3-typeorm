@@ -19,8 +19,8 @@ function getDbPath(): string {
         return './src/assets/data/test.db';
     } else {
         return process.platform === 'win32' ?
-        './test.db' :
-        path.join(app.getAppPath(), '/../../../../test.db' );
+        path.resolve('./', 'test.db') :
+        path.resolve(app.getAppPath(), '/../../../../test.db' );
     }
 }
 
@@ -40,8 +40,7 @@ const createWindow = async () => {
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true
+            nodeIntegration: true
         }
     });
 
@@ -51,9 +50,9 @@ const createWindow = async () => {
     // and load the index.html of the app.
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-    const y = userRepo.find().then(w => {
-        console.log(w);
-    });
+    // const y = userRepo.find().then(w => {
+    //     console.log(w);
+    // });
 
     // Open the DevTools.
     if (isDevMode) {
@@ -67,6 +66,17 @@ const createWindow = async () => {
         // when you should delete the corresponding element.
         mainWindow = null;
     });
+
+    // ipcMain.on('get-settings', async (event: any, ..._args: any[]) => {
+    //     try {
+    //         const x =  path.resolve('./', 'test.db');
+    //         const y = path.resolve(app.getAppPath(), '../../test.db');
+    //         const z = path.resolve('../../', 'test.db');
+    //         event.returnValue = await x + ' - ' + y + ' - ' + z;
+    //     } catch (err) {
+    //         throw err;
+    //     }
+    // });
 
     ipcMain.on('get-users', async (event: any, ..._args: any[]) => {
         try {

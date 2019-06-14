@@ -1,5 +1,4 @@
 const path = require('path');
-
 const PATH_TO_ROOT = path.resolve(__dirname, '..');
 
 /**

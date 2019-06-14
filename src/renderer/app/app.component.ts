@@ -7,21 +7,48 @@ import { forkJoin } from 'rxjs';
 
 @Component({
     selector: 'app-crv',
-    templateUrl: './app.template.html',
+    template: `
+    <div style="text-align:center">
+    <h1>
+        Welcome to {{ title }}!
+    </h1>
+    <!-- <ul *ngIf="imageList" style="list-style-type: none;">
+        <li *ngFor="let image of imageList" style="display: inline; padding: 10px;">
+            <img [src]="getPicture(image.ImageValue)" />
+        </li>
+    </ul> -->
+
+    <button (click)="addUser()">Add user</button>
+    <button (click)="deleteUser()">Delete user</button>
+    <h2>User list: </h2>
+    <div>
+        <ul style="list-style-type: none;">
+            <li *ngFor="let user of userList">
+                {{ user.FirstName }} {{ user.LastName }}
+            </li>
+        </ul>
+    </div>
+</div>
+    `,
 })
 export class AppComponent implements OnInit {
     public readonly title = 'Electron + Sqlite + typeorm';
     userList: TUser[];
     imageList: TPicture[];
-    pathWebpack: string;
 
     constructor(
         private dbservice: DatabaseService,
         private sanitizer: DomSanitizer) {
-            this.pathWebpack = MAIN_WINDOW_WEBPACK_ENTRY;
+            console.log('Constructor');
         }
 
     ngOnInit(): void {
+        // console.log('onInit');
+        // this.dbservice.getSettings().subscribe(
+        //     x => {
+        //         console.log(x);
+        //     }
+        // );
         forkJoin(this.dbservice.getUsers(),
         this.dbservice.getPictures())
         .subscribe(

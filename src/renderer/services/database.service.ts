@@ -10,6 +10,12 @@ import { Observable, of } from 'rxjs';
 export class DatabaseService {
     constructor(private electronService: ElectronService) {}
 
+    getSettings(): Observable<string> {
+        return of(this.electronService.ipcRenderer.sendSync('get-settings')).pipe(
+            catchError((error: any) => Observable.throw(error.json))
+        );
+    }
+
     getUsers(): Observable<TUser[]> {
         return of(this.electronService.ipcRenderer.sendSync('get-users')).pipe(
             catchError((error: any) => Observable.throw(error.json))

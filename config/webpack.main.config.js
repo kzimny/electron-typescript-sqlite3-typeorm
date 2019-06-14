@@ -10,7 +10,8 @@ const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 const config = {
     entry: './src/main/index.ts',
     externals: {
-        sqlite3: 'commonjs sqlite3'
+        typeorm: 'typeorm',
+        sqlite3: 'sqlite3',
     },
     plugins: [
         //ignore the drivers you don't want. This is the complete list of all drivers -- remove the suppressions for drivers you want to use.
